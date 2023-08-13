@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/JimHacker1980/voting/static/css/main.073c9b0a.css",
+    "main.js": "/JimHacker1980/voting/static/js/main.ef252d70.js",
+    "static/js/787.ee04e7c1.chunk.js": "/JimHacker1980/voting/static/js/787.ee04e7c1.chunk.js",
+    "index.html": "/JimHacker1980/voting/index.html",
+    "main.073c9b0a.css.map": "/JimHacker1980/voting/static/css/main.073c9b0a.css.map",
+    "main.ef252d70.js.map": "/JimHacker1980/voting/static/js/main.ef252d70.js.map",
+    "787.ee04e7c1.chunk.js.map": "/JimHacker1980/voting/static/js/787.ee04e7c1.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.073c9b0a.css",
+    "static/js/main.ef252d70.js"
+  ]
+}
