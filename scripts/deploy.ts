@@ -1,47 +1,34 @@
-import { writeFileSync } from 'fs'
-import { Voting } from '../src/contracts/voting'
-import { privateKey } from './privateKey'
-import { bsv, TestWallet, DefaultProvider, sha256 } from 'scrypt-ts'
+import { Name, Voting, N } from '../src/contracts/voting'
+import { bsv, TestWallet, DefaultProvider, toByteString, FixedArray } from 'scrypt-ts'
 
-function getScriptHash(scriptPubKeyHex: string) {
-    const res = sha256(scriptPubKeyHex).match(/.{2}/g)
-    if (!res) {
-        throw new Error('scriptPubKeyHex is not of even length')
-    }
-    return res.reverse().join('')
-}
+import * as dotenv from 'dotenv'
+
+dotenv.config()
+
+const privateKey = bsv.PrivateKey.fromWIF(process.env.PRIVATE_KEY || '')
+
+
+const signer = new TestWallet(privateKey, new DefaultProvider({
+    network: bsv.Networks.testnet
+}))
 
 async function main() {
     await Voting.compile()
 
-    // Prepare signer. 
-    // See https://scrypt.io/docs/how-to-deploy-and-call-a-contract/#prepare-a-signer-and-provider
-    const signer = new TestWallet(privateKey, new DefaultProvider({
-        network: bsv.Networks.testnet
-    }))
-
-    // TODO: Adjust the amount of satoshis locked in the smart contract:
-    const amount = 100
+    const candidateNames: FixedArray<Name, typeof N> = [
+        toByteString('Math', true),
+        toByteString('Physics', true)
+    ]
 
     const instance = new Voting(
-        // TODO: Pass constructor parameter values.
-        0n
+        candidateNames
     )
 
-    // Connect to a signer.
     await instance.connect(signer)
 
-    // Contract deployment.
+    const amount = 1
     const deployTx = await instance.deploy(amount)
-
-    // Save deployed contracts script hash.
-    const scriptHash = getScriptHash(instance.lockingScript.toHex())
-    const shFile = `.scriptHash`;
-    writeFileSync(shFile, scriptHash);
-
-    console.log('Voting contract was successfully deployed!')
-    console.log(`TXID: ${deployTx.id}`)
-    console.log(`scriptHash: ${scriptHash}`)
+    console.log('Voting contract deployed: ', deployTx.id)
 }
 
 main()

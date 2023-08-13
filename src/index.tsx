@@ -3,10 +3,22 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import { Scrypt, bsv } from 'scrypt-ts'
+
+import { Voting } from './contracts/voting';
+import artifact  from '../artifacts/voting.json';
+Voting.loadArtifact(artifact);
+
+
+Scrypt.init({
+  apiKey: "testnet_1bO25vtaFD8aVqswSNT2HVKkXqLzDHZGGDv05OrpIjvOeiZ3a", 
+  network: bsv.Networks.testnet
+})
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
+
 root.render(
   <React.StrictMode>
     <App />
